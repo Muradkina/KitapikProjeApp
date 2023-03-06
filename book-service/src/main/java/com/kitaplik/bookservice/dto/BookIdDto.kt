@@ -2,7 +2,7 @@ package com.kitaplik.bookservice.dto
 
 //BookIdDto bana sadece 2 tane tekil olan id ve isbn dönecek
 data class BookIdDto @JvmOverloads constructor(
-    val id: String? = "",
+    val bookId: String? = "",
     val isbn: String
 ) {
     companion object{

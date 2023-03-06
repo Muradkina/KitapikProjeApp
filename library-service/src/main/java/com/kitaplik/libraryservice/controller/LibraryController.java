@@ -1,5 +1,6 @@
 package com.kitaplik.libraryservice.controller;
 
+import com.kitaplik.libraryservice.dto.AddBookRequest;
 import com.kitaplik.libraryservice.dto.LibraryDto;
 import com.kitaplik.libraryservice.service.LibraryService;
 import org.springframework.http.ResponseEntity;
@@ -24,5 +25,11 @@ public class LibraryController {
     @PostMapping
     public ResponseEntity<LibraryDto>createLibrary(){
          return ResponseEntity.ok(libraryService.createLibrary());
+    }
+
+    @PutMapping
+    public ResponseEntity<Void>addBookToLibrary(@RequestBody AddBookRequest bookRequest) throws Exception{
+        libraryService.addBookToLibrary(bookRequest);
+        return ResponseEntity.ok().build();
     }
 }

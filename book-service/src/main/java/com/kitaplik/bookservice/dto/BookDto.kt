@@ -13,6 +13,7 @@ import com.kitaplik.bookservice.model.Book
 
 
 //data class içinde equls hash code tostring gibi özellikler mevcuttur
+
 data class BookDto @JvmOverloads constructor(
     val id: BookIdDto? = null,
     val title: String,

@@ -40,6 +40,7 @@ public class BookController {
         return ResponseEntity.ok(bookService.findByIsbn(isbn));
     }
 
+    //getBookById kitabın detaylarını döner
     @GetMapping("/book/{id}")
     public ResponseEntity<BookDto>getBookById(@PathVariable  @NotEmpty String id){
         return ResponseEntity.ok(bookService.findBookDetailsById(id));

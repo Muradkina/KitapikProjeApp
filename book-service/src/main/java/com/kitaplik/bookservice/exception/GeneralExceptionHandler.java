@@ -17,21 +17,8 @@ import java.util.Map;
 //@ExceptionHandler ise exception (service ya da validation da patlayınca) patladıgı anda controllere gitmeden
 //biz yakalayamazsak bile spring kendisi yakalar ve stacke döner. kendimiz hatayı devir alıp handler ederi  durumu extra malıyetten de kurtatıt
 @RestControllerAdvice
-public class GeneralExceptionHandler extends ResponseEntityExceptionHandler {
+public class GeneralExceptionHandler  {
 
-    @Override
-    protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
-                                                                  HttpHeaders headers, HttpStatus status,
-                                                                  WebRequest request) {
-        Map<String, String> errors = new HashMap<>();
-        ex.getBindingResult().getAllErrors().forEach(error ->{
-            String fieldName = ((FieldError) error).getField();
-            String errorMessage = error.getDefaultMessage();
-            errors.put(fieldName, errorMessage);
-        });
-
-        return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
-    }
 
 
     @ExceptionHandler(BookNotFoundExeption.class)
