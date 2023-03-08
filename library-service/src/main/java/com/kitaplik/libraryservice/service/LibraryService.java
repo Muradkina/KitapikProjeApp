@@ -6,9 +6,9 @@ import com.kitaplik.libraryservice.dto.LibraryDto;
 import com.kitaplik.libraryservice.exception.LibraryNotFoundException;
 import com.kitaplik.libraryservice.model.Library;
 import com.kitaplik.libraryservice.repository.LibraryRepo;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
@@ -21,9 +21,15 @@ public class LibraryService {
         this.bookServiceClient = bookServiceClient;
     }
 
+    //-->>getAllBooksInLibraryById id ile bir sorgulama yapılıyor karşışığında kütüphaneye ait bütün kitaplar geri dönüyor
+    //null kullanmadım burada LibraryDto da val userBookList:
+    // List<BookDto>? null olabilir
+    // defaultuda = ArrayList() olsun ddedım
     public LibraryDto getAllBooksInLibraryById(String id) {
         Library library = libraryRepo.findById(id)
-                .orElseThrow(() -> new LibraryNotFoundException("Library could not found by id: " + id));
+                //orElseThrow sebebi jparepositorynin findById metodu optinal döner.bu optionalı controllere geri göndermemeliyiz
+                //sebebi ise->optional bir seriazble nesne değildir
+                .orElseThrow(() -> new LibraryNotFoundException("ID'ye göre kütüphane bulunamadı: " + id));
 
         LibraryDto libraryDto = new LibraryDto(library.getId(),
                 library.getUserBook()
@@ -31,6 +37,12 @@ public class LibraryService {
                         .map(book -> bookServiceClient.getBookById(book).getBody())
                         .collect(Collectors.toList()));
         return libraryDto;
+    }
+
+    public List<String> getAllLibrary() {
+       return libraryRepo.findAll().stream()
+                .map(l -> l.getId())
+                .collect(Collectors.toList());
     }
 
 
@@ -44,16 +56,12 @@ public class LibraryService {
         String bookId = bookServiceClient.getBookByIsbn(bookRequest.getIsbn()).getBody().getBookId();
         Library library = libraryRepo.findById(bookRequest.getId())
                 .orElseThrow(() -> new LibraryNotFoundException
-                        ("Library could not found by id: " + bookRequest.getId()));
+                        ("ID'ye göre kütüphane bulunamadı: " + bookRequest.getId()));
         library.getUserBook().add(bookId);
         libraryRepo.save(library);
     }
 }
-//-->>getAllBooksInLibraryById id ile bir sorgulama yapılıyor karşışığında kütüphaneye ait bütün kitaplar geri dönüyor
 
-//orElseThrow sebebi jparepositorynin findById metodu optinal döner.bu optionalı controllere geri göndermemeliyizz
-//sebebi ise->optional bir seriazble nesne değildir
 
-//null kullanmadım burada LibraryDto da val userBookList:
-// List<BookDto>? null olabilir
-// defaultuda = ArrayList() olsun ddedım
+
+

@@ -27,7 +27,7 @@ public class BookService {
     public BookIdDto findByIsbn(String isbn) {
         return bookRepo.getBookByIsbn(isbn)
                 .map(book -> new BookIdDto(book.getId(), book.getIsbn()))
-                .orElseThrow(() -> new BookNotFoundExeption("Book could not found by isbn : " + isbn));
+                .orElseThrow(() -> new BookNotFoundExeption("ISBN'ye göre kitap bulunamadı. : " + isbn));
         //BookNotFoundExeption nesne oluşturmanın maliyeti try catch'e göre cok fazladır.
         //try catch x ise BookNotFoundExeption'u new lemek 10 20 x dir.
         //throw etmekde 0,5 kadar
@@ -37,6 +37,6 @@ public class BookService {
     public BookDto findBookDetailsById(String id) {
         return bookRepo.findById(id)
                 .map(BookDto::convert)
-                .orElseThrow(() -> new BookNotFoundExeption("Book could not found by id : " + id));
+                .orElseThrow(() -> new BookNotFoundExeption("ID'ye göre kitap bulunamadı. : " + id));
     }
 }
